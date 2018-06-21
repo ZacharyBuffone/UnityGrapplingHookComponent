@@ -1,4 +1,4 @@
-# UnityGrapplingHookComponent
+# Unity GrapplingHook Component
 Simple force based grappling hook componet for Unity3d.
 
 
@@ -33,4 +33,20 @@ The break_tether_velo option sets a velocity where if a player exceeds, the teth
 
 ## How it actually works (the physics)
 
-Depending on what mode is selected, a tension force is applied at certain conditions. 
+Depending on what mode is selected, a tension force is applied at certain conditions. In modes ratcheting and loose, tension is applied during an frame where the player distance to the grappling node will exceed the tether_distance next update. In rigid mode, tension force is applied every frame.
+
+
+The tension force is calculated as followed.
+* Calculate velocity in units/frame (V_upf)
+* Test position = V_upf + current_posision aka (test_pos)
+* New position after frame = (text_pos - hooked_node_pos).normalized * tether_distance + hooked_node_pos (new_pos)
+* New velocity = new_pos - current_posision (new_velo)
+
+Force = mass * (d_velocity / d_time)
+
+* d_velocity = new_velo - V_upf
+* Tension force = mass * (d_velocity / d_time)
+* Tension force is applied as impulse (force is only applied this frame)
+
+![how it works](https://i.imgur.com/EZFc2aT.png)
+
