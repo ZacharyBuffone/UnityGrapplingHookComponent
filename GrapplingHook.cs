@@ -130,7 +130,7 @@ public class GrapplingHook : MonoBehaviour {
         Vector3 delta_velocity = new_velocity - curr_velo_upf;
         Vector3 tension_force = (rigidbody.mass * (delta_velocity / Time.fixedDeltaTime));
 
-        rigidbody.AddForce(tension_force);
+        rigidbody.AddForce(tension_force, ForceMode.Impulse);
     }
 
     public void BreakTether()
