@@ -6,6 +6,7 @@ public class GrapplingHook : MonoBehaviour {
     public Camera camera_camera;
     public GrapplingHookMode grappling_hook_mode;
     public bool draw_dev_line = true;
+    public bool disconent_on_los_break;
     public float break_tether_velo;
 
     public enum GrapplingHookMode {Ratcheting, Loose, Rigid};
@@ -72,6 +73,16 @@ public class GrapplingHook : MonoBehaviour {
         //hook is attached and player held down mouse
         if (hooked_node != null && Input.GetMouseButton(0))
         {
+            //if los is broken and option is selected, break tether
+            RaycastHit hit;
+            Ray ray = new Ray(gameObject.transform.position, (hooked_node.transform.position - gameObject.transform.position).normalized);
+            if (disconent_on_los_break && Physics.Raycast(ray, out hit) && hit.collider.tag != GRAPPLING_NODE_TAG)
+            {
+                Debug.Log("LOS Break");
+                BreakTether();
+                return;
+            }
+
             //if the velo is > break_tether_velo, break tether
             if (rigidbody.velocity.magnitude > break_tether_velo)
             {
@@ -131,6 +142,12 @@ public class GrapplingHook : MonoBehaviour {
         Vector3 tension_force = (rigidbody.mass * (delta_velocity / Time.fixedDeltaTime));
 
         rigidbody.AddForce(tension_force, ForceMode.Impulse);
+    }
+
+    public void ChangeGrapplingMode(GrapplingHookMode mode)
+    {
+        grappling_hook_mode = mode;
+        return;
     }
 
     public void BreakTether()
