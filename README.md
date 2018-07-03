@@ -31,6 +31,8 @@ The draw_dev_line draws a line from the player's transform.position to the hooke
 
 The break_tether_velo option sets a velocity where if a player exceeds, the tether breaks. Set this option to "Infinity" if you do not want this behaviour.
 
+The disconnect_on_los_break option breaks the tether of the los to the grabbling node is broken.
+
 ## How it actually works (the physics)
 
 Depending on what mode is selected, a tension force is applied at certain conditions. In modes ratcheting and loose, tension is applied during an frame where the player distance to the grappling node will exceed the tether_distance next update. In rigid mode, tension force is applied every frame.
